@@ -29,7 +29,7 @@ enum MusicMenu: CaseIterable {
 
 final class MusicViewController: UIViewController {
     
-    //private let viewModel = MainViewModel()
+    //private let viewModel = MusicViewModel()
     private var subscriptions = Set<AnyCancellable>()
     
     private lazy var titleView = TitleView(title: "Music", hasBackButton: true)
@@ -89,8 +89,14 @@ extension MusicViewController: UITableViewDelegate {
         case 0:
             return
         case 1:
+            let playListsViewController = PlayListsViewController()
+            navigationController?.pushViewController(playListsViewController, animated: true)
             return
         case 2:
+            return
+        case 3:
+            return
+        case 4:
             return
         default:
             break
