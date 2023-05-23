@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+final class PlayingStatus {
+    static let shared = PlayingStatus()
+    private init() {}
+    enum PlayingMode {
+        case playing, paused, stopped
+    }
+    var playingMode: PlayingMode = .stopped
+}

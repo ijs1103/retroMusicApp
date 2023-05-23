@@ -24,9 +24,7 @@ final class PlayListsDetailViewController: UIViewController {
         tableView.backgroundColor = .white
         return tableView
     }()
-    
-    //private lazy var activityIndicator = ActivityIndicatorView()
-    
+        
     init(with playList: Playlist) {
         self.viewModel = PlayListsDetailViewModel(with: playList)
         self.titleView = TitleView(title: playList.name, hasBackButton: true)
@@ -88,9 +86,13 @@ extension PlayListsDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 재생화면으로 이동, userDefaults에 nowPlaying으로 저장
         guard let tracks = viewModel.playListTracks.value else { return }
-        let track = tracks[indexPath.item]
-//        let nowPlayingViewController = NowPlayingViewController(with: track)
-//        navigationController?.pushViewController(nowPlayingViewController, animated: true)
+        let selectedTrack = tracks[indexPath.item]
+        viewModel.setPlayerQueue(selectedTrackId: selectedTrack.id)
+        let nowPlayingViewController = NowPlayingViewController(with: selectedTrack)
+        navigationController?.pushViewController(nowPlayingViewController, animated: true)
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
     }
 }
 extension PlayListsDetailViewController: UITableViewDataSource {

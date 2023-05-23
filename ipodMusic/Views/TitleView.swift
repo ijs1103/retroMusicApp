@@ -18,6 +18,11 @@ final class TitleView: UIView {
     
     private let gradientLayer = CAGradientLayer()
     
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: self.layer)
+        gradientLayer.frame = self.bounds
+    }
+
     private var hasBackButton: Bool
     
     private lazy var backButton: UIImageView = {

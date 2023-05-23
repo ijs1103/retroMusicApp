@@ -83,6 +83,9 @@ extension PlayListsViewController: UITableViewDelegate {
         let playListsDetailViewController = PlayListsDetailViewController(with: playList)
         navigationController?.pushViewController(playListsDetailViewController, animated: true)
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
+    }
 }
 extension PlayListsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

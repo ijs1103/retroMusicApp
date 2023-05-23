@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+final class SelectedTracks {
+    static let shared = SelectedTracks()
+    private init() {}
+    var list: [ParsedPlayList] = []
+}

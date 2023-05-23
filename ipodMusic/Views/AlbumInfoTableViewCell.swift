@@ -16,7 +16,7 @@ final class AlbumInfoTableViewCell: UITableViewCell {
     private lazy var albumImage: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 
@@ -93,7 +93,7 @@ extension AlbumInfoTableViewCell {
             $0.leading.equalToSuperview()
             $0.top.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.width.height.equalTo(60.0)
+            $0.width.equalTo(60.0)
         }
         
         disclosureImage.snp.makeConstraints {

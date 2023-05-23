@@ -7,8 +7,9 @@
 import Foundation
 import MusicKit
 import Combine
+import UIKit
 
-typealias ParsedPlayList = (id: MusicItemID, albumUrl: URL?, title: String, subTitle: String?)
+typealias ParsedPlayList = (id: String, albumUrl: URL?, title: String, subTitle: String, duration: Int?, albumTitle: String?, albumImage: UIImage?)
 typealias OriginalPlayLists = MusicItemCollection<Playlist>
 final class PlayListsViewModel {
     private var subscriptions = Set<AnyCancellable>()
@@ -25,7 +26,7 @@ extension PlayListsViewModel {
             let response = try await request.response()
             let decoded = try JSONDecoder().decode(OriginalPlayLists.self, from: response.data)
             originalPlayLists.send(decoded)
-            let parsedPlayLists: [ParsedPlayList] = decoded.map { return (id: $0.id, albumUrl: $0.artwork?.url(width: 60, height: 60), title: $0.name,  subTitle: $0.standardDescription)}
+            let parsedPlayLists: [ParsedPlayList] = decoded.map { return (id: $0.id.rawValue, albumUrl: $0.artwork?.url(width: 60, height: 60), title: $0.name,  subTitle: $0.standardDescription ?? "", duration: nil, albumTitle: nil, albumImage: nil)}
             playLists.send(parsedPlayLists)
         } catch {
             print("request failed")

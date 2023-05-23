@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+final class ControlStatus {
+    static let shared = ControlStatus()
+    private init() {}
+    enum RepeatStatus {
+        case repeatOff, repeatOn, repeatOne
+    }
+    enum ShuffleStatus {
+        case shuffleOff, shuffleOn
+    }
+    var repeatMode: RepeatStatus = .repeatOff
+    var shuffleMode: ShuffleStatus = .shuffleOff
+}
