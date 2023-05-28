@@ -94,6 +94,7 @@ extension TitleView {
             backButton.snp.makeConstraints {
                 $0.leading.equalToSuperview().inset(16.0)
                 $0.centerY.equalToSuperview()
+                $0.width.equalTo(30.0)
             }
         }
         titleLabel.snp.makeConstraints {
@@ -111,6 +112,7 @@ extension TitleView {
             $0.width.equalTo(40.0)
         }
         stackView.snp.makeConstraints {
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(8.0)
             $0.trailing.equalToSuperview().inset(16.0)
             $0.height.equalTo(20.0)
             $0.centerY.equalToSuperview()

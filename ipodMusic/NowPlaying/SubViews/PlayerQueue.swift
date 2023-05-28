@@ -23,6 +23,9 @@ final class PlayerQueue {
     func showCurrentSong() -> MPMediaItem? {
         return player.nowPlayingItem
     }
+    func playTrack() {
+        player.play()
+    }
     
     // MARK: - Play All
     /// Plays all the songs in an array of ids. Staring with the first and prepending the rest to the queue

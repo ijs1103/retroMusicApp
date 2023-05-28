@@ -105,7 +105,8 @@ extension PlayListsDetailViewController: UITableViewDataSource {
         cell?.selectionStyle = .none
         if let tracks = viewModel.playListTracks.value {
             let track = tracks[indexPath.item]
-            cell?.update(with: track)
+            let albumInfo = (id: track.id, albumUrl: track.albumUrl!, title: track.title, subTitle: track.subTitle)
+            cell?.update(with: albumInfo)
         }
         return cell ?? UITableViewCell()
     }

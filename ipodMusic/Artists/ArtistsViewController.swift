@@ -1,24 +1,24 @@
 //
-//  PlayListsViewController.swift
+//  ArtistsViewController.swift
 //  ipodMusic
 //
-//  Created by 이주상 on 2023/05/16.
+//  Created by 이주상 on 2023/05/25.
 //
 
 import UIKit
 import SnapKit
 import Combine
 
-final class PlayListsViewController: UIViewController {
+final class ArtistsViewController: UIViewController {
     
-    private let viewModel = PlayListsViewModel()
+    private let viewModel = ArtistsViewModel()
     private var subscriptions = Set<AnyCancellable>()
     
-    private lazy var titleView = TitleView(title: "PlayLists", hasBackButton: true)
+    private lazy var titleView = TitleView(title: "Artists", hasBackButton: true)
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(AlbumInfoTableViewCell.self, forCellReuseIdentifier: AlbumInfoTableViewCell.identifier)
+        tableView.register(InfoTableViewCell.self, forCellReuseIdentifier: InfoTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .white
@@ -37,11 +37,11 @@ final class PlayListsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Task {
-            await viewModel.fetchPlayLists()
+            await viewModel.fetchArtists()
         }
     }
 }
-extension PlayListsViewController {
+extension ArtistsViewController {
 
     private func setupViews() {
         [titleView, tableView].forEach {
@@ -62,12 +62,12 @@ extension PlayListsViewController {
         titleView.delegate = self
     }
     private func bind() {
-        viewModel.playLists
+        viewModel.artists
             .receive(on: RunLoop.main)
-            .sink { [unowned self] playlists in
+            .sink { [unowned self] artists in
                 Spinner.hideLoading()
-                guard let playlists = playlists else { return }
-                if playlists.count > 0 {
+                guard let artists = artists else { return }
+                if artists.count > 0 {
                     self.tableView.backgroundView?.isHidden = true
                 } else {
                     self.tableView.backgroundView?.isHidden = false
@@ -76,34 +76,34 @@ extension PlayListsViewController {
             }.store(in: &subscriptions)
     }
 }
-extension PlayListsViewController: UITableViewDelegate {
+extension ArtistsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let playLists = viewModel.originalPlayLists.value else { return }
-        let playList = playLists[indexPath.item]
-        let playListsDetailViewController = PlayListsDetailViewController(with: playList)
-        navigationController?.pushViewController(playListsDetailViewController, animated: true)
+        guard let artists = viewModel.artists.value else { return }
+        let artistId = artists[indexPath.item].id
+        let artistName = artists[indexPath.item].artistName
+        let artistsDetailViewController = ArtistsDetailViewController(id: artistId, artistName: artistName)
+        navigationController?.pushViewController(artistsDetailViewController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 40.0
     }
 }
-extension PlayListsViewController: UITableViewDataSource {
+extension ArtistsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.playLists.value?.count ?? 0
+        return viewModel.artists.value?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: AlbumInfoTableViewCell.identifier, for: indexPath) as? AlbumInfoTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.identifier, for: indexPath) as? InfoTableViewCell
         cell?.selectionStyle = .none
-        if let playLists = viewModel.playLists.value {
-            let playList = playLists[indexPath.item]
-            let albumInfo = (id: playList.id, albumUrl: playList.albumUrl, title: playList.title, subTitle: playList.subTitle)
-            cell?.update(with: albumInfo)
+        if let artists = viewModel.artists.value {
+            let artistName = artists[indexPath.item].artistName
+            cell?.update(with: artistName)
         }
         return cell ?? UITableViewCell()
     }
 }
-extension PlayListsViewController: TitleViewDelegate {
+extension ArtistsViewController: TitleViewDelegate {
     func didTapBackButton() {
         navigationController?.popViewController(animated: true)
     }

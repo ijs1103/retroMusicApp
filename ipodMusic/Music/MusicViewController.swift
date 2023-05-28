@@ -93,6 +93,8 @@ extension MusicViewController: UITableViewDelegate {
             navigationController?.pushViewController(playListsViewController, animated: true)
             return
         case 2:
+            let artistsViewController = ArtistsViewController()
+            navigationController?.pushViewController(artistsViewController, animated: true)
             return
         case 3:
             return

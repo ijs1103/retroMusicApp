@@ -28,11 +28,7 @@ extension NowPlayingViewModel {
     }
     func play() async {
         Spinner.showLoading()
-        do {
-            try await SystemMusicPlayer.shared.play()
-        } catch {
-            print("player play error")
-        }
+        PlayerQueue.shared.playTrack()
         Spinner.hideLoading()
     }
     func playNextSong() {

@@ -30,7 +30,6 @@ final class MenuTableBackgroundView: UIView {
 extension MenuTableBackgroundView {
     private func setupView() {
         addSubview(textLabel)
-
         textLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }

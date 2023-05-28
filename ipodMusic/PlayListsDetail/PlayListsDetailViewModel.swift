@@ -41,5 +41,4 @@ extension PlayListsDetailViewModel {
         let parsedIds = [selectedTrackId] + otherTracksIds
         PlayerQueue.shared.setQueue(ids: parsedIds)
     }
-
 }
