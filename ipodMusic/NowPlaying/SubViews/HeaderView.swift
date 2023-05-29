@@ -48,10 +48,18 @@ final class HeaderView: UIView {
         label.textColor = .systemGray
         return label
     }()
-    private lazy var stackView: UIStackView = {
+    private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [songNameLabel, artistNameLabel, albumNameLabel])
         stackView.spacing = 2.0
         stackView.axis = .vertical
+        stackView.alignment = .center
+        return stackView
+    }()
+    private lazy var spacingView = UIView()
+    private lazy var hStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [backButton, vStackView, spacingView])
+        stackView.spacing = 16.0
+        stackView.axis = .horizontal
         stackView.alignment = .center
         return stackView
     }()
@@ -83,17 +91,19 @@ extension HeaderView {
         self.addGradient(with: gradientLayer, colorSet: colorSet, locations: location, startEndPoints: startEndPoints)
     }
     private func setupView() {
-        [ backButton, stackView ].forEach {
+        [ hStackView ].forEach {
             addSubview($0)
         }
         backButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(16.0)
-            $0.centerY.equalToSuperview()
             $0.height.equalTo(36.0)
             $0.width.equalTo(40.0)
         }
-        stackView.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        spacingView.snp.makeConstraints {
+            $0.width.equalTo(backButton.snp.width)
+        }
+        hStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(16.0)
+            $0.top.bottom.equalToSuperview()
         }
     }
     @objc private func didTapBackButton() {

@@ -27,7 +27,7 @@ final class TitleView: UIView {
     
     private lazy var backButton: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "chevron.backward")
+        imageView.image = UIImage(systemName: "arrow.left")
         imageView.isUserInteractionEnabled = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapBackButton))
         imageView.addGestureRecognizer(tapGestureRecognizer)
@@ -95,6 +95,7 @@ extension TitleView {
                 $0.leading.equalToSuperview().inset(16.0)
                 $0.centerY.equalToSuperview()
                 $0.width.equalTo(30.0)
+                $0.height.equalTo(26.0)
             }
         }
         titleLabel.snp.makeConstraints {
@@ -116,6 +117,9 @@ extension TitleView {
             $0.trailing.equalToSuperview().inset(16.0)
             $0.height.equalTo(20.0)
             $0.centerY.equalToSuperview()
+        }
+        self.snp.makeConstraints {
+            $0.height.equalTo(50.0)
         }
     }
     @objc private func didTapBackButton() {

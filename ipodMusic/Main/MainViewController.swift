@@ -62,7 +62,6 @@ extension MainViewController {
         titleView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(40.0)
         }
         tableView.snp.makeConstraints {
             $0.top.equalTo(titleView.snp.bottom)

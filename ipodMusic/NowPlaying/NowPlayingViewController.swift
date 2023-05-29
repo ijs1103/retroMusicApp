@@ -75,7 +75,7 @@ extension NowPlayingViewController {
         header.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(60.0)
+            $0.height.equalTo(80.0)
         }
         albumImage.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom)

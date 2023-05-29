@@ -1,38 +1,32 @@
 //
-//  ArtistsDetailDetailViewController.swift
+//  AlbumsViewController.swift
 //  ipodMusic
 //
-//  Created by 이주상 on 2023/05/27.
+//  Created by 이주상 on 2023/05/28.
 //
 
 import UIKit
 import SnapKit
-import MusicKit
 import Combine
 
-final class ArtistsDetailDetailViewController: UIViewController {
+final class AlbumsViewController: UIViewController {
     
-    private let viewModel: ArtistsDetailDetailViewModel
+    private let viewModel = AlbumsViewModel()
     private var subscriptions = Set<AnyCancellable>()
-    private var titleView: TitleView
+    
+    private lazy var titleView = TitleView(title: "Albums", hasBackButton: true)
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(InfoTableViewCell.self, forCellReuseIdentifier: InfoTableViewCell.identifier)
+        tableView.register(AlbumInfoTableViewCell.self, forCellReuseIdentifier: AlbumInfoTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .white
+        let backgroundView = MenuTableBackgroundView()
+        tableView.backgroundView = backgroundView
+        backgroundView.isHidden = true
         return tableView
     }()
-        
-    init(album: Album) {
-        self.viewModel = ArtistsDetailDetailViewModel(album: album)
-        self.titleView = TitleView(title: album.title, hasBackButton: true)
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,11 +37,12 @@ final class ArtistsDetailDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Task {
-            await viewModel.fetchTracksByAlbum()
+            await viewModel.fetchArtists()
         }
     }
 }
-extension ArtistsDetailDetailViewController {
+extension AlbumsViewController {
+
     private func setupViews() {
         [titleView, tableView].forEach {
             view.addSubview($0)
@@ -55,25 +50,23 @@ extension ArtistsDetailDetailViewController {
         titleView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(40.0)
         }
         tableView.snp.makeConstraints {
             $0.top.equalTo(titleView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        
     }
     private func setupDelegates() {
         titleView.delegate = self
     }
     private func bind() {
-        viewModel.tracksByAlbum
+        viewModel.albums
             .receive(on: RunLoop.main)
-            .sink { [unowned self] tracks in
+            .sink { [unowned self] albums in
                 Spinner.hideLoading()
-                guard let tracks = tracks else { return }
-                if tracks.count > 0 {
+                guard let albums = albums else { return }
+                if albums.count > 0 {
                     self.tableView.backgroundView?.isHidden = true
                 } else {
                     self.tableView.backgroundView?.isHidden = false
@@ -82,34 +75,34 @@ extension ArtistsDetailDetailViewController {
             }.store(in: &subscriptions)
     }
 }
-extension ArtistsDetailDetailViewController: UITableViewDelegate {
+extension AlbumsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let tracks = viewModel.tracksByAlbum.value else { return }
-        let selectedTrack = tracks[indexPath.item]
-        viewModel.setPlayerQueue(selectedTrackId: selectedTrack.id)
-        let nowPlayingViewController = NowPlayingViewController(with: selectedTrack)
-        navigationController?.pushViewController(nowPlayingViewController, animated: true)
+        guard let albums = viewModel.originalAlbums.value else { return }
+        let album = albums[indexPath.item]
+        let albumsDetailViewController = AlbumsDetailViewController(album: album)
+        navigationController?.pushViewController(albumsDetailViewController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60.0
     }
 }
-extension ArtistsDetailDetailViewController: UITableViewDataSource {
+extension AlbumsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.tracksByAlbum.value?.count ?? 0
+        return viewModel.albums.value?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.identifier, for: indexPath) as? InfoTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: AlbumInfoTableViewCell.identifier, for: indexPath) as? AlbumInfoTableViewCell
         cell?.selectionStyle = .none
-        if let tracks = viewModel.tracksByAlbum.value {
-            let trackName = tracks[indexPath.item].title
-            cell?.update(with: trackName)
+        if let albums = viewModel.albums.value {
+            let album = albums[indexPath.item]
+            let albumInfo = (id: album.id, albumUrl: album.albumUrl, title: album.albumName, subTitle: album.aritstName)
+            cell?.update(with: albumInfo)
         }
         return cell ?? UITableViewCell()
     }
 }
-extension ArtistsDetailDetailViewController: TitleViewDelegate {
+extension AlbumsViewController: TitleViewDelegate {
     func didTapBackButton() {
         navigationController?.popViewController(animated: true)
     }
