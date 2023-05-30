@@ -1,25 +1,25 @@
 //
-//  MenuTableBackgroundView.swift
+//  TableBackgroundView.swift
 //  ipodMusic
 //
-//  Created by 이주상 on 2023/05/18.
+//  Created by 이주상 on 2023/05/30.
 //
 
 import UIKit
 import SnapKit
 
-final class MenuTableBackgroundView: UIView {
+final class TableBackgroundView: UIView {
         
     private lazy var textLabel: UILabel = {
         let label = UILabel()
-        label.text = "No saved playlists"
         label.textColor = .secondaryLabel
         label.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
         return label
     }()
 
-    init() {
+    init(with text: String) {
         super.init(frame: .zero)
+        textLabel.text = text
         setupView()
     }
     
@@ -27,7 +27,7 @@ final class MenuTableBackgroundView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-extension MenuTableBackgroundView {
+extension TableBackgroundView {
     private func setupView() {
         addSubview(textLabel)
         textLabel.snp.makeConstraints {

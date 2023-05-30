@@ -22,7 +22,7 @@ final class AlbumsViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .white
-        let backgroundView = MenuTableBackgroundView()
+        let backgroundView = TableBackgroundView(with: "No saved albums")
         tableView.backgroundView = backgroundView
         backgroundView.isHidden = true
         return tableView

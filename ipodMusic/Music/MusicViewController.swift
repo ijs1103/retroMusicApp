@@ -51,10 +51,13 @@ final class MusicViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupNavigation()
     }
 }
 extension MusicViewController {
-
+    private func setupNavigation() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     private func setupViews() {
         [titleView, tableView].forEach {
             view.addSubview($0)
@@ -100,6 +103,8 @@ extension MusicViewController: UITableViewDelegate {
             navigationController?.pushViewController(albumsViewController, animated: true)
             return
         case 4:
+            let searchViewController = SearchViewController()
+            navigationController?.pushViewController(searchViewController, animated: true)
             return
         default:
             break
