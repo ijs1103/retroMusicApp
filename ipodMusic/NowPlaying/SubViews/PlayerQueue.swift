@@ -13,8 +13,11 @@ final class PlayerQueue {
     static let shared = PlayerQueue()
     private init() {}
     private var player = MPMusicPlayerController.systemMusicPlayer
-    
-    func playNextSong() {
+    // queue에 플레이할 노래가 없는지 확인
+    func isQueueEmpty() -> Bool {
+        return player.indexOfNowPlayingItem == 0
+    }
+    func playNextSong() {        
         player.skipToNextItem()
     }
     func playPrevSong() {

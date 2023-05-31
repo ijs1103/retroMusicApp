@@ -31,6 +31,9 @@ extension NowPlayingViewModel {
         PlayerQueue.shared.playTrack()
         Spinner.hideLoading()
     }
+    func isSongEmpty() -> Bool {
+        return PlayerQueue.shared.isQueueEmpty()
+    }
     func playNextSong() {
         PlayerQueue.shared.playNextSong()
     }

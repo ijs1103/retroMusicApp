@@ -50,10 +50,10 @@ struct Artwork: Codable {
 }
 
 struct Relationships: Codable {
-    let albums: Albums
+    let albums: RealtedAlbums
 }
 
-struct Albums: Codable {
+struct RealtedAlbums: Codable {
     let href: String
     let data: [AlbumsDatum]
 }
@@ -92,3 +92,5 @@ struct Songs: Codable {
     let href, next: String
     let data: [AlbumsDatum]
 }
+
+

@@ -49,15 +49,15 @@ final class MusicViewController: UIViewController {
         setupDelegates()
         bind()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupNavigation()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        setupNavigation()
+//    }
 }
 extension MusicViewController {
-    private func setupNavigation() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
-    }
+//    private func setupNavigation() {
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+//    }
     private func setupViews() {
         [titleView, tableView].forEach {
             view.addSubview($0)

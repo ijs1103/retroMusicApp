@@ -24,7 +24,7 @@ final class SearchViewController: UIViewController {
         tableView.backgroundColor = .white
         return tableView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchBar()
@@ -34,13 +34,18 @@ final class SearchViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavigation()
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        DispatchQueue.main.async {
+            self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        }
     }
 }
 extension SearchViewController {
-    private func setupNavigation() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
+    
     private func setupSearchBar() {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.searchTextField.backgroundColor = .white
@@ -79,6 +84,9 @@ extension SearchViewController: UITableViewDelegate {
         case 0:
             return
         case 1:
+            guard let artists = viewModel.searchResults.value?.artists else { return }
+            let searchResultArtistsVC = SearchResultArtistsViewController(with: artists)
+            navigationController?.pushViewController(searchResultArtistsVC, animated: true)
             return
         case 2:
             return

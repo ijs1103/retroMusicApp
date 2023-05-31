@@ -181,6 +181,7 @@ extension NowPlayingViewController: FooterViewDelegate {
         }
     }
     func didTapPrevButton() {
+        if viewModel.isSongEmpty() { return }
         viewModel.playPrevSong()
         guard let prevTrack = viewModel.getTrack() else { return }
         updateUI(with: prevTrack)
@@ -191,6 +192,7 @@ extension NowPlayingViewController: FooterViewDelegate {
         startTimer()
     }
     func didTapNextButton() {
+        if viewModel.isSongEmpty() { return }
         viewModel.playNextSong()
         guard let nextTrack = viewModel.getTrack() else { return }
         updateUI(with: nextTrack)
