@@ -8,8 +8,8 @@ import MusicKit
 import Combine
 import UIKit
 
-typealias SearchResultsType = (artists: [ArtistsDatum], albums: [AlbumsDatum], songs: [AlbumsDatum])
-typealias SearchCountType = (artists: Int, albums: Int, songs: Int)
+typealias SearchResultsType = (artists: [ArtistsDatum], songs: [AlbumsDatum])
+typealias SearchCountType = (artists: Int, songs: Int)
 
 final class SearchViewModel {
     private let network = NetworkService(configuration: .default)
@@ -41,15 +41,9 @@ extension SearchViewModel {
             let decoded = try JSONDecoder().decode(SearchResult.self, from: response.data)
             let results = decoded.results
             let artistsData = results.artists.data
-            let albumsData = artistsData.flatMap {
-                $0.relationships.albums.data
-            }
             let songsData = results.songs.data
-            let albumsCount = artistsData.map {
-                $0.relationships.albums.data.count
-            }.reduce(0, { $0 + $1 })
-            searchResults.send((artists: artistsData, albums: albumsData, songs: songsData))
-            searchCount.send((artists: artistsData.count, albums: albumsCount, songs: songsData.count))
+            searchResults.send((artists: artistsData, songs: songsData))
+            searchCount.send((artists: artistsData.count, songs: songsData.count))
         } catch {
             searchResults.send(nil)
             searchCount.send(nil)

@@ -45,11 +45,8 @@ final class SearchViewController: UIViewController {
     }
 }
 extension SearchViewController {
-    
     private func setupSearchBar() {
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.searchTextField.backgroundColor = .white
-        searchController.searchBar.placeholder = "Search artists,albums,songs"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
@@ -89,8 +86,9 @@ extension SearchViewController: UITableViewDelegate {
             navigationController?.pushViewController(searchResultArtistsVC, animated: true)
             return
         case 2:
-            return
-        case 3:
+            guard let songs = viewModel.searchResults.value?.songs else { return }
+            let searchResultSongsVC = SearchResultsSongsViewController(with: songs)
+            navigationController?.pushViewController(searchResultSongsVC, animated: true)
             return
         default:
             break
@@ -102,7 +100,7 @@ extension SearchViewController: UITableViewDelegate {
 }
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchInfoTableViewCell.identifier, for: indexPath) as? SearchInfoTableViewCell
@@ -116,9 +114,6 @@ extension SearchViewController: UITableViewDataSource {
             searchInfo = (image: UIImage(named: "artists_icon")!, title: "Artists", subTitle: "\(viewModel.searchCount.value?.artists ?? 0) artists")
             cell?.update(with: searchInfo)
         case 2:
-            searchInfo = (image: UIImage(named: "albums_icon")!, title: "Albums", subTitle: "\(viewModel.searchCount.value?.albums ?? 0) albums")
-            cell?.update(with: searchInfo)
-        case 3:
             searchInfo = (image: UIImage(named: "song_icon")!, title: "Songs", subTitle: "\(viewModel.searchCount.value?.songs ?? 0) songs")
             cell?.update(with: searchInfo)
         default:
