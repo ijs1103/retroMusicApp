@@ -46,14 +46,7 @@ final class NowPlayingViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupDelegates()
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        Task {
-            await viewModel.play()
-        }
-        startTimer()
-        PlayingStatus.shared.playingMode = .playing
+        setupPlaying()
     }
     deinit {
         stopTimer()
@@ -98,6 +91,13 @@ extension NowPlayingViewController {
         header.delegate = self
         footer.delegate = self
         playingControl.delegate = self
+    }
+    private func setupPlaying() {
+        Task {
+            await viewModel.play()
+        }
+        startTimer()
+        PlayingStatus.shared.playingMode = .playing
     }
     @objc private func didTapAlbumImage() {
         playingControl.isHidden.toggle()
@@ -154,9 +154,14 @@ extension NowPlayingViewController {
         playingControl.setTimeLabel(playingTime: playingTime, remainingTime: remainingTime)
         footer.setStoppedStatusAndImage()
     }
+    func setTimeLabel(currentSeconds: Int, playingTime: String, remainingTime: String) {
+        viewModel.currentSeconds = currentSeconds
+        playingControl.setTimeLabel(playingTime: playingTime, remainingTime: remainingTime)
+    }
 }
 extension NowPlayingViewController: HeaderViewDelegate {
     func didTapBackButton() {
+        viewModel.setNowPlayingState()
         navigationController?.popViewController(animated: true)
     }
 }

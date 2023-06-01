@@ -29,7 +29,6 @@ enum MusicMenu: CaseIterable {
 
 final class MusicViewController: UIViewController {
     
-    //private let viewModel = MusicViewModel()
     private var subscriptions = Set<AnyCancellable>()
     
     private lazy var titleView = TitleView(title: "Music", hasBackButton: true)
@@ -47,7 +46,6 @@ final class MusicViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupDelegates()
-        bind()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -71,15 +69,6 @@ extension MusicViewController {
     }
     private func setupDelegates() {
         titleView.delegate = self
-    }
-    private func bind() {
-//        viewModel.isSubscribing
-//            .receive(on: RunLoop.main)
-//            .sink { [unowned self] isSubscribing in
-//                if !isSubscribing {
-//                    self.messageAlert(message: "Apple Music을 구독해주세요.")
-//                }
-//            }.store(in: &subscriptions)
     }
 }
 extension MusicViewController: UITableViewDelegate {

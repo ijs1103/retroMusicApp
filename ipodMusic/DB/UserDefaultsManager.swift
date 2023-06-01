@@ -14,4 +14,18 @@ struct UserDefaultsManager {
     static func setIsSubscribing(isSubscribing: Bool) {
         UserDefaults.standard.set(isSubscribing, forKey: "isSubscribing")
     }
+    static func setNowPlayingState(nowPlayingState: NowPlayingState) {
+        if let encoded = try? JSONEncoder().encode(nowPlayingState) {
+            UserDefaults.standard.set(encoded, forKey: "NowPlayingState")
+        }
+    }
+    static func getNowPlayingState() -> NowPlayingState? {
+        if let object = UserDefaults.standard.object(forKey: "NowPlayingState") as? Data {
+            if let nowPlayingState = try? JSONDecoder().decode(NowPlayingState.self, from: object) {
+                return nowPlayingState
+            }
+        }
+        print("JSON Decoding Failed")
+        return nil
+    }
 }

@@ -29,7 +29,13 @@ final class PlayerQueue {
     func playTrack() {
         player.play()
     }
-    
+    func getCurrentPlayingTime() -> Int {
+        return Int(player.currentPlaybackTime)
+    }
+    // 현재 음원이 재생중인지 확인하는 메서드
+    func isPlayerPlaying() -> Bool {
+        return player.playbackState == .playing
+    }
     // MARK: - Play All
     /// Plays all the songs in an array of ids. Staring with the first and prepending the rest to the queue
     /// - Parameter ids: The song ids from the Apple Music catalog to play

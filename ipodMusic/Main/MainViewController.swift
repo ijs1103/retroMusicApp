@@ -39,7 +39,7 @@ final class MainViewController: UIViewController {
         tableView.backgroundColor = .white
         return tableView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -81,20 +81,23 @@ extension MainViewController {
 }
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !viewModel.isSubscribing.value { return }
         switch indexPath.item {
         case 0:
-//            if !viewModel.isSubscribing.value {
-//                return
-//            }
             let musicViewController = MusicViewController()
             navigationController?.pushViewController(musicViewController, animated: true)
         case 1:
             let settingsViewController = SettingsViewController()
             navigationController?.pushViewController(settingsViewController, animated: true)
         case 2:
-            if !viewModel.isSubscribing.value {
-                return
-            }
+            let nowPlayState = UserDefaultsManager.getNowPlayingState()
+            guard let song = nowPlayState?.nowPlayingSong, let currentPlayingTime = nowPlayState?.currentPlayingTime else { return }
+            let playlist = (id: song.id, albumUrl: song.albumUrl, title: song.title, subTitle: song.subTitle, duration: song.duration, albumTitle: song.albumTitle, albumImage: UIImage())
+            let nowPlayingViewController = NowPlayingViewController(with: playlist)
+            let playingTime = currentPlayingTime.secondsToText()
+            let remainingTime = (song.duration! - currentPlayingTime).secondsToText()
+            nowPlayingViewController.setTimeLabel(currentSeconds: currentPlayingTime, playingTime: playingTime, remainingTime: remainingTime)
+            navigationController?.pushViewController(nowPlayingViewController, animated: true)
         default:
             break
         }
