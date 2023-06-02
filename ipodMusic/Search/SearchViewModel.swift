@@ -12,7 +12,6 @@ typealias SearchResultsType = (artists: [ArtistsDatum], songs: [AlbumsDatum])
 typealias SearchCountType = (artists: Int, songs: Int)
 
 final class SearchViewModel {
-    private let network = NetworkService(configuration: .default)
     private var subscriptions = Set<AnyCancellable>()
     var searchTerm = CurrentValueSubject<String, Never>("")
     var searchResults = CurrentValueSubject<SearchResultsType?, Never>(nil)

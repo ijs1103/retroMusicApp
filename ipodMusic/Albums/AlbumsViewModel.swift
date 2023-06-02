@@ -10,7 +10,6 @@ import Combine
 import UIKit
 
 final class AlbumsViewModel {
-    private let network = NetworkService(configuration: .default)
     var albums = CurrentValueSubject<[(id: String, albumUrl: URL?, albumName: String, aritstName: String)]?, Never>(nil)
     var originalAlbums = CurrentValueSubject<MusicItemCollection<Album>?, Never>(nil)
 }

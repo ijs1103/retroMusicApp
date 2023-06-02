@@ -10,7 +10,6 @@ import Combine
 import UIKit
 
 final class ArtistsViewModel {
-    private let network = NetworkService(configuration: .default)
     var artists = CurrentValueSubject<[(id: String, artistName: String)]?, Never>(nil)
 }
 
