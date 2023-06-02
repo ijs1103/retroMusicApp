@@ -74,7 +74,7 @@ extension NowPlayingViewModel {
     func setNowPlayingState() {
         // 현재 재생중인 노래의 상태를 저장
         guard let currentSong = PlayerQueue.shared.showCurrentSong() else { return }
-        let nowPlayingSong = NowPlayingSong(id: currentSong.playbackStoreID, albumUrl: currentSong.artwork?.image(at: CGSize(width: 600.0, height: 600.0))?.imageToURL(), title: currentSong.title ?? "No name", subTitle: currentSong.artist ?? "No name", duration: Int(currentSong.playbackDuration), albumTitle: currentSong.albumTitle)
+        let nowPlayingSong = NowPlayingSong(id: currentSong.playbackStoreID, albumUrl: playList.albumUrl, title: currentSong.title ?? "No name", subTitle: currentSong.artist ?? "No name", duration: Int(currentSong.playbackDuration), albumTitle: currentSong.albumTitle)
         let currentPlayingTime = PlayerQueue.shared.getCurrentPlayingTime()
         let nowPlayingState = NowPlayingState(nowPlayingSong: nowPlayingSong, currentPlayingTime: currentPlayingTime)
         UserDefaultsManager.setNowPlayingState(nowPlayingState: nowPlayingState)
