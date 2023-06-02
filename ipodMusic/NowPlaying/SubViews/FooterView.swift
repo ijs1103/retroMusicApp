@@ -152,6 +152,9 @@ extension FooterView {
             PlayingStatus.shared.playingMode = .playing
         }
     }
+    func updateVolumeSlider(volume: Float) {
+        volumeSlider.value = volume
+    }
     @objc private func didTapPrevButton() {
         delegate?.didTapPrevButton()
     }

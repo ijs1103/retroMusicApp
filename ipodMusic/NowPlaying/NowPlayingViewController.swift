@@ -10,13 +10,14 @@ import SnapKit
 import MusicKit
 import Combine
 import Kingfisher
+import AVFAudio
+import MediaPlayer
 
 enum TimerStatus {
     case suspended, canceled, resumed
 }
 
 final class NowPlayingViewController: UIViewController {
-    
     private var viewModel: NowPlayingViewModel
     private var subscriptions = Set<AnyCancellable>()
     private var timer: DispatchSourceTimer?
@@ -47,6 +48,10 @@ final class NowPlayingViewController: UIViewController {
         setupViews()
         setupDelegates()
         setupPlaying()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupVolume()
     }
     deinit {
         stopTimer()
@@ -98,6 +103,9 @@ extension NowPlayingViewController {
         }
         startTimer()
         PlayingStatus.shared.playingMode = .playing
+    }
+    private func setupVolume() {
+        footer.updateVolumeSlider(volume: AVAudioSession.sharedInstance().outputVolume)
     }
     @objc private func didTapAlbumImage() {
         playingControl.isHidden.toggle()
